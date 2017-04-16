@@ -32,15 +32,15 @@ After this, you can include the bundled release versions in your HTML file:
 
 <head>
   <meta charset="utf-8">
-  <script src="bower_components/bitcore/bitcore-lib.min.js"></script>
+  <script src="bower_components/bitcore/bitcore-lib-dash.min.js"></script>
   <script src="bower_components/bitcore-mnemonic/bitcore-mnemonic.min.js"></script>
 </head>
 
 <body>
 
   <script type="text/javascript">
-    var bitcore = require('bitcore-lib');
-    var Mnemonic = require('bitcore-mnemonic');
+    var bitcore = require('bitcore-lib-dash');
+    var Mnemonic = require('bitcore-mnemonic-dash');
     // etc...
   </script>
 
