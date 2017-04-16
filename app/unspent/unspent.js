@@ -13,8 +13,8 @@ angular.module('playApp.unspent', ['ngRoute'])
 
   var explorers = require('bitcore-explorers-dash');
 
-  var defaultLivenetAddress = '1PPQ2anP7DVWmeScdo8fCSTeWCpfBDFAhy';
-  var defaultTestnetAddress = 'mfnUxBP3JjS4pU1kddzUshF8bcU7wF99mx';
+  var defaultLivenetAddress = 'XcszUwjgiLXMV6RHFUYkaRdFgy9JGBz5RA';
+  var defaultTestnetAddress = 'yfCMRqQFTt85ggFBMoKKSATPorCdX4YxiU';
   $scope.bitcoreURL = 'http://bitcore.io/guide/module/explorers/index.html';
   $scope.bitcoinURL = 'https://bitcoin.org/en/developer-guide#term-output';
 
