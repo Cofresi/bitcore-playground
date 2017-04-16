@@ -11,7 +11,7 @@ angular.module('playApp.unspent', ['ngRoute'])
 
 .controller('UnspentCtrl', function($scope, $http, bitcore) {
 
-  var explorers = require('bitcore-explorers');
+  var explorers = require('bitcore-explorers-dash');
 
   var defaultLivenetAddress = '1PPQ2anP7DVWmeScdo8fCSTeWCpfBDFAhy';
   var defaultTestnetAddress = 'mfnUxBP3JjS4pU1kddzUshF8bcU7wF99mx';
