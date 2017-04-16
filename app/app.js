@@ -15,7 +15,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/units'});
 }]);
 
-app.constant('bitcore', require('bitcore-lib'));
+app.constant('bitcore', require('bitcore-lib-dash'));
 
 // Filters
 app.filter('btc', function(bitcore) {
