@@ -74,7 +74,7 @@ angular.module('playApp.units', ['ngRoute'])
     $scope.updateUnit(value, rate.rate);
   };
 
-  $scope.updateUnit(1, 'BTC');
+  $scope.updateUnit(1, 'DASH');
 
   $http.get('https://bitpay.com/api/rates').
   success(function(rates) {
@@ -90,7 +90,7 @@ angular.module('playApp.units', ['ngRoute'])
 
     });
     $scope.currency = rates[0];
-    $scope.updateUnit(1, 'BTC');
+    $scope.updateUnit(1, 'DASH');
   }).
   error(function() {
     console.log('Error while fetching exchange rates');
