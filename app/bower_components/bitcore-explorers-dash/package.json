@@ -1,0 +1,44 @@
+{
+  "name": "bitcore-explorers-dash",
+  "version": "1.0.1",
+  "description": "Module to query blockchain apis for Bitcore DASH.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "coverage": "gulp coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cofresi/bitcore-explorers-dash.git"
+  },
+  "keywords": [
+    "DASH",
+    "bitcore",
+    "insight"
+  ],
+  "author": "BitPay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cofresi/bitcore-explorers-dash/issues"
+  },
+  "browser": {
+    "request": "browser-request"
+  },
+  "homepage": "https://github.com/Cofresi/bitcore-explorers-dash",
+  "devDependencies": {
+    "bitcore-build-dash": "dashpay/bitcore-build-dash",
+    "brfs": "^1.2.0",
+    "browserify": "^8.1.1",
+    "chai": "^2.0.0",
+    "gulp": "^3.8.10",
+    "sinon": "^1.12.2"
+  },
+  "dependencies": {
+    "bitcore-lib-dash": "^0.13.20",
+    "browser-request": "^0.3.3",
+    "request": "^2.51.0"
+  }
+}
