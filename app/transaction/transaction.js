@@ -66,7 +66,7 @@ angular.module('playApp.transaction', ['ngRoute'])
   $scope.utxos = [];
 
   $scope.fetchUTXO = function(address) {
-    var client = new explorers.Insight();
+    var client = new explorers.Insight('https://dev-test.dash.org:3001');
     if (!bitcore.Address.isValid(address)) return; // mark as invalid
     
     $scope.loading = true;

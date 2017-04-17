@@ -44,7 +44,7 @@ angular.module('playApp.unspent', ['ngRoute'])
   });
 
   $scope.fetchUTXO = function(address) {
-    var client = new explorers.Insight();
+    var client = new explorers.Insight('https://dev-test.dash.org:3001');
 
     if (!bitcore.Address.isValid(address)) {
       return; // mark as invalid
@@ -81,7 +81,7 @@ angular.module('playApp.unspent', ['ngRoute'])
     var address = $scope.utxoAddress || '1BitcoinEaterAddressDontSendf59kuE';
 
     template += "var explorers = require('bitcore-explorers-dash');\n";
-    template += "var client = new explorers.Insight();\n";
+    template += "var client = new explorers.Insight('https://dev-test.dash.org:3001');\n";
     template += "client.getUnspentUtxos('" + address + "', function(err, utxos) {\n";
     template += "    UTXOs = utxos;\n";
     template += "    console.log('UTXOs:', utxos);\n";
