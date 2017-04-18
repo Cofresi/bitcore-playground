@@ -70,15 +70,7 @@ angular.module('playApp.transaction', ['ngRoute'])
     if (!bitcore.Address.isValid(address)) return; // mark as invalid
     
     $scope.loading = true;
-    //client.getUtxos(address, onUTXOs);
-
-      client.getUtxos(address, function(err, utxos) {
-          console.log("utxos: " + utxos);
-          if (err) {
-              console.log('getUtxos error: ' + err);
-          }
-      });
-
+    client.getUtxos(address, onUTXOs);
 
     $scope.fromAddresses.push(address);
 
