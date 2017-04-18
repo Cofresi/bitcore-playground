@@ -44,7 +44,12 @@ angular.module('playApp.unspent', ['ngRoute'])
   });
 
   $scope.fetchUTXO = function(address) {
-    var client = new explorers.Insight();
+    var client;
+      if (bitcore.Networks.defaultNetwork.name === 'testnet') {
+          client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+      } else {
+          client = new explorers.Insight('https://insight.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+      }
 
     if (!bitcore.Address.isValid(address)) {
       return; // mark as invalid

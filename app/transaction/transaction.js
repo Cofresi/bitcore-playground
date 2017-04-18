@@ -66,7 +66,12 @@ angular.module('playApp.transaction', ['ngRoute'])
   $scope.utxos = [];
 
   $scope.fetchUTXO = function(address) {
-    var client = new explorers.Insight();
+      var client;
+      if (bitcore.Networks.defaultNetwork.name === 'testnet') {
+          client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+      } else {
+          client = new explorers.Insight('https://insight.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+      }
     if (!bitcore.Address.isValid(address)) return; // mark as invalid
     
     $scope.loading = true;
@@ -173,7 +178,12 @@ angular.module('playApp.transaction', ['ngRoute'])
 
   $scope.broadcast = function() {
     var serialized = $rootScope.transaction.serialize();
-    var client = new explorers.Insight();
+      var client;
+      if (bitcore.Networks.defaultNetwork.name === 'testnet') {
+          client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+      } else {
+          client = new explorers.Insight('https://insight.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+      }
     $scope.broadcasting = true;
     client.broadcast(serialized, function(err, id) {
       $scope.broadcasting = false;
