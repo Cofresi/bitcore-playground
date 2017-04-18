@@ -26,7 +26,7 @@ app.filter('btc', function(bitcore) {
 })
 .filter('permalink', function(bitcore) {
   return function(data, section) {
-    var url = './#/' + section + '?data=' + encodeURI(data);
+    var url = './#/' + section + '?data=' + encodeURI(data);ß
     if (url.length > 2083) throw new Error('URL too long')
     return url;
   };
