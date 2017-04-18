@@ -28,9 +28,9 @@ function Insight(url, network) {
   if (Networks.get(url)) {
     network = Networks.get(url);
     if (network === Networks.livenet) {
-      url = 'https://insight.proposal.dash.org:443';
+      url = 'https://insight.dash.org:3001';
     } else {
-      url = 'https://test-insight.dash.org:443';
+      url = 'https://dev-test.dash.org:3001';
     }
   }
   JSUtil.defineImmutable(this, {

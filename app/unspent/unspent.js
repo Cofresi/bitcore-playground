@@ -13,8 +13,8 @@ angular.module('playApp.unspent', ['ngRoute'])
 
   var explorers = require('bitcore-explorers-dash');
 
-  var defaultLivenetAddress = 'XcszUwjgiLXMV6RHFUYkaRdFgy9JGBz5RA';
-  var defaultTestnetAddress = 'yfCMRqQFTt85ggFBMoKKSATPorCdX4YxiU';
+  var defaultLivenetAddress = 'Xx93S4aEAvk4sc7a7mV2DH4xgSrpNv73np';
+  var defaultTestnetAddress = 'yfDmZYuLJAx3tuJYwie36xWXz15NWdUPfM';
   $scope.bitcoreURL = 'http://bitcore.io/guide/module/explorers/index.html';
   $scope.bitcoinURL = 'https://bitcoin.org/en/developer-guide#term-output';
 
@@ -44,7 +44,7 @@ angular.module('playApp.unspent', ['ngRoute'])
   });
 
   $scope.fetchUTXO = function(address) {
-    var client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+    var client = new explorers.Insight();
 
     if (!bitcore.Address.isValid(address)) {
       return; // mark as invalid

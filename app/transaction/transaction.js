@@ -14,8 +14,8 @@ angular.module('playApp.transaction', ['ngRoute'])
   $scope.bitcoreURL = 'http://bitcore.io/guide/transaction.html';
   $scope.bitcoinURL = 'https://bitcoin.org/en/developer-guide#transactions';
   var explorers = require('bitcore-explorers-dash');
-  var defaultLivenetAddress = 'XcszUwjgiLXMV6RHFUYkaRdFgy9JGBz5RA';
-  var defaultTestnetAddress = 'yfCMRqQFTt85ggFBMoKKSATPorCdX4YxiU';
+  var defaultLivenetAddress = 'Xx93S4aEAvk4sc7a7mV2DH4xgSrpNv73np';
+  var defaultTestnetAddress = 'yfDmZYuLJAx3tuJYwie36xWXz15NWdUPfM';
   var _ = bitcore.deps._;
 
   $scope.$on('networkUpdate', function() {
@@ -66,11 +66,20 @@ angular.module('playApp.transaction', ['ngRoute'])
   $scope.utxos = [];
 
   $scope.fetchUTXO = function(address) {
-    var client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+    var client = new explorers.Insight();
     if (!bitcore.Address.isValid(address)) return; // mark as invalid
     
     $scope.loading = true;
-    client.getUtxos(address, onUTXOs);
+    //client.getUtxos(address, onUTXOs);
+
+      client.getUtxos(address, function(err, utxos) {
+          console.log("utxos: " + utxos);
+          if (err) {
+              console.log('getUtxos error: ' + err);
+          }
+      });
+
+
     $scope.fromAddresses.push(address);
 
     function onUTXOs(err, utxos) {
