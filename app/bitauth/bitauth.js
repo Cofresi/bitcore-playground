@@ -33,6 +33,8 @@ angular.module('playApp.bitauth', ['ngRoute'])
     $scope.currentAddress = '';
     $rootScope.transaction = new bitcore.Transaction();
     $scope.privateKey = '';
+    $scope.authbase = '';
+    $scope.authheadAddress = '';
 
     $scope.fromAddresses = [];
     $rootScope.toAddresses = {};
@@ -45,6 +47,8 @@ angular.module('playApp.bitauth', ['ngRoute'])
   reset();
 
   $scope.privateKey = '';
+  $scope.authbase = '';
+  $scope.authheadAddress = '';
 
   $scope.fromAddresses = [];
   $rootScope.toAddresses = {};
