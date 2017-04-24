@@ -7,14 +7,16 @@
 </div>
 <div class="row collapse pb20">
   <div class="small-12 columns">
-    <p>Build, sign and broadcast a bitauth transactions. (not yet implemented)</p>
+    <p>Part I. Build, sign and broadcast bitauth transactions<br/>
+    Part II. Sync to latest Authhead and migrate identity</p>
   </div>
 </div>
 
+<h5 class=""><strong>Part I. Build, sign and broadcast bitauth transactions</strong></h5>
 <div class="row collapse bg-color-white white-box radius p20">
   <div class="small-12 columns">
-    <h2 class=""><strong>Step 1:</strong> Input Selection</h2>
-    <p>Enter a DASH transaction input</p>
+    <h2 class=""><strong>Step 1:</strong> Start by selecting INPUTS of a funded address to start defining your AUTHBASE Tx</h2>
+    <p>Enter any Address under your control that has at least one unspent output</p>
 
     <!-- Fetch unspent form -->
     <div class="row collapse">
@@ -92,7 +94,7 @@
 
 <div class="row mt20">
   <div class="small-12 columns bg-color-white white-box radius p20">
-    <h2 class="">Transaction</h2>
+    <h2 class=""><strong>Step 1:</strong> Sign Inputs and define Identity output and optional Signature output(s) of BitAuth2017 Tx</h2>
     <div class="row collapse border-bottom">
       <div class="fnt09 mt2 row collapse">
         <span class="item-title large-1 small-3 columns center">TX ID:</span>
@@ -196,18 +198,27 @@
                     <div class="small-6 columns">
                       <div class="row collapse">
                         <div class="small-11 columns">
-                          <button type="button" data-reveal-id="addAddressModal" class="expand button tiny radius button1"><i class="fi-plus"></i> Add Address</button>
+                          <button id="identityoutput" type="button" data-reveal-id="addP2PKHorP2SHModal" class="expand button tiny radius button1"><i class="fi-plus"></i> Add Identity Output</button>
                         </div>
                       </div>
                     </div>
-                    <div class="small-6 columns">
-                      <div class="row collapse">
-                        <div class="small-11 small-offset-1 columns">
-                          <button type="button" data-reveal-id="addDataModal" class="expand button tiny radius button1"><i class="fi-plus"></i> Add Data</button>
-                        </div>
+                  <div class="small-6 columns">
+                    <div class="row collapse">
+                      <div class="small-11 columns">
+                        <button id="signatureoutput"  disabled="true" type="button" data-reveal-id="addP2PKHorP2SHModal" class="expand button tiny radius button1"><i class="fi-plus"></i> Add Signature Output(s)</button>
                       </div>
                     </div>
+                  </div>
                 </div>
+              <div class="row collapse mb5">
+                <div class="small-6 columns">
+                  <div class="row collapse">
+                    <div class="small-11 columns">
+                      <button id="opreturnoutput"  disabled="true" type="button" data-reveal-id="addDataModal" class="expand button tiny radius button1"><i class="fi-plus"></i> Add EVO User Account</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
                 <div class="mt27">
                     <div class="row collapse capsule-inside p10 mb5 radius" ng-repeat="output in transaction.outputs">
                       <div class="small-12 columns">
@@ -275,7 +286,7 @@
     <div class="row collapse">
       <div class="large-12 columns mt5">
         <button type="button" ng-click="broadcast()" ng-disabled="!canSerialize() || broadcasting" class="button expand tiny radius button1">
-          <span ng-hide="broadcasting">Broadcast Transaction</span>
+          <span ng-hide="broadcasting">Broadcast BitAuth2017 AuthBase Transaction</span>
           <span ng-show="broadcasting">
             <ng-include src="'components/loader.html'"></ng-include>
           </span>
@@ -289,39 +300,110 @@
 
 <ng-include src="'components/explanation.html'"></ng-include>
 
+<h5 class=""><strong>Part II. Sync to latest Authhead and migrate identity</strong></h5>
+
 <!--MODAL starts-->
-<div id="addAddressModal" class="reveal-modal fixed-position white-box" data-reveal>
-  <h2>Add a Pay to Address</h2>
+<div id="addP2PKHorP2SHModal" class="reveal-modal fixed-position white-box" data-reveal>
+  <h2>Choose one of two options:</h2>
+  <br/>
+  <h2>1. Simple Version: Add a P2PKH output</h2>
   <form name="formAddress">
     <div class="row">
       <div class="small-12 large-4 columns">
-        <input type="text" ng-model="toAddress" placeholder="enter an address" address auto-select>
+        <input type="text" ng-model="toAddress" placeholder="enter an address you control" address auto-select>
       </div>
       <div class="small-12 large-4 columns">
         <div class="row collapse">
           <div class="small-12 large-11 large-offset-1">
-            <input type="number" ng-min="0.00000001" ng-max="2100000000000000" ng-model="amount" placeholder="enter an amount in BTC" auto-select required>
+            <input type="number" ng-min="0.00000001" ng-max="2100000000000000" ng-model="amount" placeholder="enter an amount in DASH" auto-select required>
           </div>
         </div>
       </div>
       <div class="small-12 large-4 columns">
         <div class="row collapse">
           <div class="small-12 large-11 large-offset-1">
-            <button type="button" ng-disabled="formAddress.$invalid" ng-click="addAddressOutput(toAddress, amount)" data-reveal-id="addAddressModal" class="button expand tiny radius button1">Send to Address</button>
+            <button type="button" ng-disabled="formAddress.$invalid" ng-click="addAddressOutput(toAddress, amount)" data-reveal-id="addP2PKHorP2SHModal" class="button expand tiny radius button1">add P2PKH output</button>
           </div>
         </div>
       </div>
     </div>
   </form>
+
+  <!-- close modal -->
   <a href="" ng-click="remove($index)" class="close-reveal-modal">
     <i class="fi-x center-text link1 fnt04"></i>
   </a>
+
+  <br/>
+  <h2>OR</h2>
+  <br/>
+
+  <h2>2. More secure version: Add a P2SH (multisig) output</h2>
+  <form name="formMultisigAddress">
+
+    <!-- P2SH Part -->
+    <div class="row collapse">
+      <div class="large-12 columns">
+        <div class="row bg-color-white collapse radius mb20">
+
+          <!-- Configure MultiSig -->
+          <div class="large-6 small-11 columns">
+            <div class="row collapse">
+
+              <div class="large-4 small-12 columns mt5">
+                <h3 class="key-title"><span class="icon-private-key fntgrey1 fnt18 center-text"></span>Configure MultiSig</h3>
+              </div>
+
+              <div class="large-7 small-10 columns">
+                <input type="text" ng-model="toMultisigAddress" placeholder="or enter a multisig address you already set up" address auto-select>
+              </div>
+
+              <div class="large-1 small-2 columns">
+                <div class="row collapse">
+                  <div class="small-11 small-offset-1 columns">
+                    <button ng-click="" data-reveal-id="configureMultisigModal" class="postfix radius button1 fnt12"> <i class="icon-keyring-solid"></i></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- MultiSig Amount -->
+          <div class="large-5 small-11 columns">
+            <div class="row collapse">
+              <div class="large-4 small-12 columns ">
+                <input type="number" ng-min="0.00000001" ng-max="2100000000000000" ng-model="multisigamount" placeholder="enter an amount in DASH" auto-select required>
+              </div>
+              <div class="large-8 small-12 columns">
+                <button type="button" ng-disabled="formMultisigAddress.$invalid" ng-click="addAddressOutput(toMultisigAddress, multisigamount)" data-reveal-id="addP2PKHorP2SHModal" class="button expand tiny radius button1">add P2SH output</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 <!--MODAL ends-->
 
 <!--MODAL starts-->
+<div id="configureMultisigModal" class="reveal-modal fixed-position white-box" data-reveal>
+  <h2>Configure your BitAuth Identity Security Scheme</h2>
+  <a id="multisigmodalremove" href="" ng-click="remove($index)" class="close-reveal-modal">
+    <i class="fi-x center-text link1 fnt04"></i>
+  </a>
+
+  <ng-include src="'multisigmodal/multisigmodal.html'"/>
+
+</div>
+<!--MODAL ends-->
+
+
+
+<!--MODAL starts-->
 <div id="addDataModal" class="reveal-modal fixed-position white-box" data-reveal>
-  <h2>Add a OP_RETURN Output</h2>
+  <h2>Add a OP_SUBTX (OP_RETURN) Output</h2>
   <form name="formData">
     <div class="row collapse">
       <div class="small-12 large-10 columns">

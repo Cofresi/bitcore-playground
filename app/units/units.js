@@ -1,5 +1,5 @@
 'use strict';
-
+var btcMath = require('bitcoin-math');
 angular.module('playApp.units', ['ngRoute'])
 
 .config(['$routeProvider',
@@ -56,7 +56,6 @@ angular.module('playApp.units', ['ngRoute'])
     if (value === '' || isNaN(unit.satoshis)) {
       return; // TODO: mark as invalid
     }
-
     $scope.unit.BTC = unit.BTC;
     $scope.unit.mBTC = unit.mBTC;
     $scope.unit.bits = unit.bits;

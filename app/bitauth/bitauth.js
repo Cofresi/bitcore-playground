@@ -9,10 +9,10 @@ angular.module('playApp.bitauth', ['ngRoute'])
   });
 }])
 
-.controller('TransactionCtrl', function($scope, $rootScope, $http, bitcore) {
+.controller('BitauthCtrl', function($scope, $rootScope, $http, bitcore) {
 
-  $scope.bitcoreURL = 'http://bitcore.io/guide/transaction.html';
-  $scope.bitcoinURL = 'https://bitcoin.org/en/developer-guide#transactions';
+  $scope.bitcoreURL = 'https://github.com/bitauth/bitauth2017';
+  $scope.bitcoinURL = 'https://github.com/bitauth/bitauth2017/blob/master/bips/0-bitauth.mediawiki';
   var explorers = require('bitcore-explorers-dash');
   var defaultLivenetAddress = 'Xx93S4aEAvk4sc7a7mV2DH4xgSrpNv73np';
   var defaultTestnetAddress = 'yfDmZYuLJAx3tuJYwie36xWXz15NWdUPfM';
@@ -145,7 +145,7 @@ angular.module('playApp.bitauth', ['ngRoute'])
 
   $scope.addAddressOutput = function(address, amount) {
     console.log(address, amount);
-    $('#addAddressModal').foundation('reveal', 'close');
+    $('#addP2PKHorP2SHModal').foundation('reveal', 'close');
     if (!amount && amount !== 0) {
       return;
     }
@@ -153,6 +153,12 @@ angular.module('playApp.bitauth', ['ngRoute'])
     $rootScope.toAddresses[address] = amount;
     $rootScope.transaction.to(address, amount);
     setExampleCode();
+    if (!$('#identityoutput').prop('disabled') && $('#signatureoutput').prop('disabled')) {
+        $('#identityoutput').prop("disabled",true);
+        $('#signatureoutput').prop("disabled",false);
+        $('#opreturnoutput').prop("disabled",false);
+    }
+
   };
 
   $rootScope.addDataOutput = function(info) {
@@ -160,6 +166,10 @@ angular.module('playApp.bitauth', ['ngRoute'])
     $rootScope.addData.push(info);
     $rootScope.transaction.addData(info);
     setExampleCode();
+    // op_return output is the last one, so disable outputs
+      $('#identityoutput').prop("disabled",true);
+      $('#signatureoutput').prop("disabled",true);
+      $('#opreturnoutput').prop("disabled",true);
   };
 
   $scope.addPrivateKey = function(privKey) {
@@ -252,6 +262,12 @@ angular.module('playApp.bitauth', ['ngRoute'])
 
   initialExample();
 
+    function setupKeys() {
+        $scope.keys = [1,2,3].map(getRandomKey);
+        $scope.totalKeys = $scope.keys.length;
+        $scope.threshold = 2;
+    }
+
   // Monkey patching until next bitcore version is released
   bitcore.Transaction.prototype.removeInput = function(txId, outputIndex) {
     var index;
@@ -270,4 +286,110 @@ angular.module('playApp.bitauth', ['ngRoute'])
     this.inputs = _.without(this.inputs, input);
     this._updateChangeOutput();
   };
+
+    $scope.totalKeysRange = function() {
+        var size = Math.max($scope.keys.length, 7);
+        return Range(size);
+    };
+
+    $scope.signaturesRange = function() {
+        return Range($scope.keys.length);
+    };
+
+    function Range(size) {
+        var result = [];
+        for (var i = 1; i <= size; i++) {
+            result.push(i);
+        }
+        return result;
+    }
+    $scope.addMultisigAddress = function(addr) {
+        console.log('multisigaddr: ' + addr);
+        //angular.element('#multisigmodalremove')[0].click();
+        angular.element('#identityoutput')[0].click();
+        $scope.toMultisigAddress = addr;
+        console.log('click');
+    };
+
+    function setupKeys() {
+        $scope.keys = [1,2,3].map(getRandomKey);
+        $scope.totalKeys = $scope.keys.length;
+        $scope.threshold = 2;
+    }
+
+    $scope.setKeyAmount = function(amount) {
+        var delta =  amount - $scope.keys.length;
+        if (delta > 0) {
+            for (var i = 0; i < delta; i++) $scope.add();
+        } else {
+            for (var i = 0; i > delta; i--) $scope.keys = $scope.keys.slice(0, -1);
+        }
+
+        if ($scope.threshold > amount) {
+            $scope.threshold = amount;
+        }
+    };
+
+    // Initial Setup
+    setupKeys();
+
+    function getRandomKey() {
+        var priv = new bitcore.PrivateKey();
+        return {
+            privKey: priv.toString(),
+            pubKey: priv.publicKey.toString()
+        };
+    }
+
+    $scope.add = function() {
+        $scope.keys.push(getRandomKey());
+        $scope.totalKeys = $scope.keys.length;
+    };
+
+    $scope.remove = function(index) {
+        var newKeys = [];
+        for (var key in $scope.keys) {
+            if (key != index) {
+                newKeys.push($scope.keys[key]);
+            }
+        }
+        $scope.keys = newKeys;
+        $scope.totalKeys = $scope.keys.length;
+        $scope.threshold = Math.min($scope.threshold, $scope.totalKeys);
+    };
+
+    $scope.updatePriv = function(index) {
+        var privKey = new bitcore.PrivateKey($scope.keys[index].privKey);
+        $scope.keys[index].privKey = privKey.toBuffer().toString('hex');
+        $scope.keys[index].pubKey = privKey.publicKey.toString();
+        setAddress();
+    };
+
+    $scope.randPriv = function(index) {
+        $scope.keys[index] = getRandomKey();
+        $scope.updatePriv(index);
+    };
+
+    $scope.updatePub = function(index) {
+        $scope.keys[index].privKey = '';
+        $scope.keys[index].pubKey = new bitcore.PublicKey($scope.keys[index].pubKey).toString();
+        setAddress();
+    };
+
+    var setAddress = function() {
+        var pubkeys = [];
+        for (var key in $scope.keys) {
+            pubkeys.push($scope.keys[key].pubKey);
+        }
+        var address = new bitcore.Address(pubkeys, $scope.threshold);
+
+        $scope.address = address.toString();
+        setExampleCode(pubkeys, $scope.threshold);
+    };
+
+
+
+    setAddress();
+    $scope.$watchCollection('keys', setAddress);
+    $scope.$watch('threshold', setAddress);
 });

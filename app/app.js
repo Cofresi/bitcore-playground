@@ -1,14 +1,14 @@
 'use strict';
 
 var app = angular.module('playApp', [
-  'ngRoute',
   'playApp.units',
   'playApp.address',
   'playApp.hdkeys',
   'playApp.transaction',
   'playApp.unspent',
   'playApp.bitauth',
-  'playApp.multisig'
+  'playApp.multisig',
+  'playApp.multisigmodal'
 ]);
 
 // Config
@@ -38,6 +38,7 @@ app.filter('btc', function(bitcore) {
 });
 
 // Directives
+
 app.directive('exampleCode', function() {
   return {
     link: function(scope, element, attrs) {
