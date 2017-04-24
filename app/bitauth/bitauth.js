@@ -392,4 +392,10 @@ angular.module('playApp.bitauth', ['ngRoute'])
     setAddress();
     $scope.$watchCollection('keys', setAddress);
     $scope.$watch('threshold', setAddress);
+
+    //TODO: resolve to latest authhead
+    //1. insight-api-dash/tx/[:txid] where txid is authbase id or regtx (EVO)
+    //2. extract addr of out[0] (getAddress(output)) and get utxo set (fetchUTXO(utxoAddress)) - if identity output not in utxo set then spent, get txid of spending tx
+    //3. repeat from 1. until found out[0] in utxo set
+
 });

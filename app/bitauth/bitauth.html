@@ -39,7 +39,7 @@
     <div class="row collapse" ng-show="currentAddress">
       <div class="columns small-12 content-title small-centered">
         <div class="fnt09 mt2 pt20 pb20"><span class="item-title">
-          <p><strong>Step 2:</strong> Outputs for Address:</span></p>
+          <p><strong>Step 2:</strong> Select Outputs to spend in this BitAuth Tx</span></p>
           <p class="item-data fntgrey1">Outputs for Address: {{currentAddress}}</p>
         </div>
       </div>
@@ -92,9 +92,9 @@
   </div>
 </div>
 
-<div class="row mt20">
+<div class="row mt20" ng-show="currentAddress">
   <div class="small-12 columns bg-color-white white-box radius p20">
-    <h2 class=""><strong>Step 1:</strong> Sign Inputs and define Identity output and optional Signature output(s) of BitAuth2017 Tx</h2>
+    <h2 class=""><strong>Step 3:</strong> Sign Inputs and define Identity output and optional Signature output(s) of BitAuth2017 Tx</h2>
     <div class="row collapse border-bottom">
       <div class="fnt09 mt2 row collapse">
         <span class="item-title large-1 small-3 columns center">TX ID:</span>
@@ -273,7 +273,8 @@
   </div>
 </div>
 
-<div class="row collapse bg-color-white white-box radius p20 mt20">
+<div ng-show="currentAddress" class="row collapse bg-color-white white-box radius p20 mt20">
+  <h2 class=""><strong>Step 4:</strong> Broadcast BitAuth2017 Tx</h2>
   <div class="large-3 columns">
     <div class="item-title">Serialized transaction:</span></div>
   </div>
