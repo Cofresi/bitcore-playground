@@ -1,5 +1,5 @@
 'use strict';
-var btcMath = require('bitcoin-math');
+
 angular.module('playApp.units', ['ngRoute'])
 
 .config(['$routeProvider',
