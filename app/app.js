@@ -115,6 +115,9 @@ registerValidator(app, 'publicHdpath', function(bitcore, value, scope) {
 registerValidator(app, 'address', function(bitcore, value) {
   return bitcore.Address.isValid(value);
 });
+registerValidator(app, 'authbase', function(bitcore, value, scope) {
+  return !!(/^[a-fA-F0-9]{64}?$/.exec(value));
+});
 
 // Sidebar
 app.controller('SideBar', function($scope, $rootScope, $timeout, $location) {
