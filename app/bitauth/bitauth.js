@@ -106,7 +106,34 @@ angular.module('playApp.bitauth', ['ngRoute'])
   };
 
     $scope.resolveAuthhead = function(authbase) {
-        var idoutput;
+        var client;
+        if (bitcore.Networks.defaultNetwork.name === 'testnet') {
+            client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+        } else {
+            client = new explorers.Insight('https://insight.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+        }
+        //if (!bitcore.Address.isValid(address)) return; // mark as invalid
+
+        $scope.loading2 = true;
+        client.getTransaction(authbase, onUTXOs);
+
+        //$scope.fromAddresses.push(address);
+
+        function onUTXOs(err, tx) {
+            $scope.loading2 = false;
+            if (err) throw err;
+            var spentTxId = tx.vout[0].spentTxId;
+            console.log('spentTxId: ' + spentTxId);
+            if (spentTxId !== null) {
+                $scope.resolveAuthhead(spentTxId);
+            } else {
+                $scope.$apply();
+                return;
+            }
+        }
+    };
+  /*
+    $scope.resolveAuthhead = function(authbase) {
         var client;
         if (bitcore.Networks.defaultNetwork.name === 'testnet') {
             client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
@@ -116,12 +143,8 @@ angular.module('playApp.bitauth', ['ngRoute'])
         //if (!bitcore.Transaction.isValid(authbase)) return; // mark as invalid
 
         $scope.loading2 = true;
-        console.log('trying to load');
-        client.getTransaction(authbase, onTx);
-
-        //$scope.fromAddresses.push(address);
-        console.log('waiting for tx');
-        function onTx(err, tx) {
+        console.log('requesting api...');
+        client.getTransaction(authbase, function callback(err, tx) {
             $scope.loading2 = false;
             if (err) throw err;
 
@@ -131,12 +154,15 @@ angular.module('playApp.bitauth', ['ngRoute'])
             }
 
             $scope.authbasetx = tx;
-            idoutput = tx.outputs[0];
+            var idoutput = tx.outputs[0];
             $scope.$apply();
             console.log(tx);
             console.log(idoutput);
-        }
+        });
+
+
     };
+*/
 
   $scope.signWith = function(privKey) {
     try {
