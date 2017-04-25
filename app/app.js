@@ -116,6 +116,7 @@ registerValidator(app, 'address', function(bitcore, value) {
   return bitcore.Address.isValid(value);
 });
 registerValidator(app, 'authbase', function(bitcore, value, scope) {
+  console.log('validate authbase');
   return !!(/^[a-fA-F0-9]{64}?$/.exec(value));
 });
 
