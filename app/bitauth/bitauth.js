@@ -15,7 +15,7 @@ angular.module('playApp.bitauth', ['ngRoute'])
   $scope.bitcoinURL = 'https://github.com/bitauth/bitauth2017/blob/master/bips/0-bitauth.mediawiki';
   var explorers = require('bitcore-explorers-dash');
   var defaultLivenetAddress = 'Xx93S4aEAvk4sc7a7mV2DH4xgSrpNv73np';
-  var defaultTestnetAddress = 'yfDmZYuLJAx3tuJYwie36xWXz15NWdUPfM';
+  var defaultTestnetAddress = 'yXPhYThbvYuLx95og45hYMQzkSNwyRs7Ta';
   var _ = bitcore.deps._;
 
   $scope.$on('networkUpdate', function() {
@@ -30,10 +30,11 @@ angular.module('playApp.bitauth', ['ngRoute'])
     }
     $scope.utxos = [];
     $scope.loading = false;
+    $scope.loading2 = false;
     $scope.currentAddress = '';
     $rootScope.transaction = new bitcore.Transaction();
     $scope.privateKey = '';
-    $scope.authbase = '';
+    $scope.authbasetx = '';
     $scope.authheadAddress = '';
 
     $scope.fromAddresses = [];
@@ -42,12 +43,13 @@ angular.module('playApp.bitauth', ['ngRoute'])
     $rootScope.privateKeys = [];
     $scope.change = '';
     $scope.loading = false;
+    $scope.loading2 = false;
     setExampleCode();
   };
   reset();
 
   $scope.privateKey = '';
-  $scope.authbase = '';
+  $scope.authbasetx = '';
   $scope.authheadAddress = '';
 
   $scope.fromAddresses = [];
@@ -57,6 +59,7 @@ angular.module('playApp.bitauth', ['ngRoute'])
   $scope.change = '';
   $scope.nLockTime = undefined;
   $scope.loading = false;
+  $scope.loading2 = false;
 
   $scope.$watch('nLockTime', function(newValue) {
     if (!newValue) {
@@ -101,6 +104,39 @@ angular.module('playApp.bitauth', ['ngRoute'])
       console.log(utxos);
     }
   };
+
+    $scope.resolveAuthhead = function(authbase) {
+        var idoutput;
+        var client;
+        if (bitcore.Networks.defaultNetwork.name === 'testnet') {
+            client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+        } else {
+            client = new explorers.Insight('https://insight.dash.org:3001', bitcore.Networks.defaultNetwork.name);
+        }
+        //if (!bitcore.Transaction.isValid(authbase)) return; // mark as invalid
+
+        $scope.loading2 = true;
+        console.log('trying to load');
+        client.getTransaction(authbase, onTx);
+
+        //$scope.fromAddresses.push(address);
+        console.log('waiting for tx');
+        function onTx(err, tx) {
+            $scope.loading2 = false;
+            if (err) throw err;
+
+            if (!tx.length) {
+                $scope.authbasetx = '';
+                return;
+            }
+
+            $scope.authbasetx = tx;
+            idoutput = tx.outputs[0];
+            $scope.$apply();
+            console.log(tx);
+            console.log(idoutput);
+        }
+    };
 
   $scope.signWith = function(privKey) {
     try {

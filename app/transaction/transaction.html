@@ -57,7 +57,7 @@
           </div> -->
           <div class="row collapse">
             <div class="columns small-9 pl20 pt6">
-              <h1 class="amount fnt09">{{utxo.satoshis|btc}}<span class="btc"> BTC</span></h1>
+              <h1 class="amount fnt09">{{utxo.satoshis|btc}}<span class="btc"> DASH</span></h1>
             </div>
             <!-- <div class="columns small-3">
               <div class="row collapse">
@@ -73,7 +73,7 @@
           </div> -->
           <div class="row collapse">
             <div class="columns small-9 pl20 pt6">
-              <h1 class="amount fnt09 blue-elements">{{utxo.satoshis|btc}}<span class="btc"> BTC</span></h1>
+              <h1 class="amount fnt09 blue-elements">{{utxo.satoshis|btc}}<span class="btc"> DASH</span></h1>
             </div>
             <!-- <div class="columns small-3">
               <div class="row collapse">
@@ -141,7 +141,7 @@
                 <div class="small-12 columns">
                   <div class="row collapse">
                     <div class="small-7 columns">
-                      <h1 class="amount fnt09">{{input.output.satoshis|btc}}<span class="btc"> BTC</span></h1>
+                      <h1 class="amount fnt09">{{input.output.satoshis|btc}}<span class="btc"> DASH</span></h1>
                     </div>
                     <div class="small-3 columns">
                       <div class="row collapse">
@@ -214,13 +214,13 @@
                         <div class="row collapse">
                           <div class="small-8 columns">
                             <span ng-show="output.script.isScriptHashOut() || output.script.isPublicKeyHashOut()">
-                              {{output.satoshis|btc}} BTC to {{getAddress(output) | ellipsify}}
+                              {{output.satoshis|btc}} DASH to {{getAddress(output) | ellipsify}}
                             </span>
                             <span ng-show="output.script.isDataOut()">
                               <span class="btc">Data</span>
                             </span>
                             <span ng-hide="output.script.isScriptHashOut() || output.script.isPayToPublicKeyHash() || output.script.isDataOut">
-                              {{output.satoshis|btc}} BTC to an unrecognized script
+                              {{output.satoshis|btc}} DASH to an unrecognized script
                             </span>
                           </div>
                           <div class="small-3 columns">
@@ -300,7 +300,7 @@
       <div class="small-12 large-4 columns">
         <div class="row collapse">
           <div class="small-12 large-11 large-offset-1">
-            <input type="number" ng-min="0.00000001" ng-max="2100000000000000" ng-model="amount" placeholder="enter an amount in BTC" auto-select required>
+            <input type="number" ng-min="0.00000001" ng-max="2100000000000000" ng-model="amount" placeholder="enter an amount in DASH" auto-select required>
           </div>
         </div>
       </div>
