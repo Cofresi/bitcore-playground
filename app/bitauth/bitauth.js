@@ -34,8 +34,9 @@ angular.module('playApp.bitauth', ['ngRoute'])
     $scope.currentAddress = '';
     $rootScope.transaction = new bitcore.Transaction();
     $scope.privateKey = '';
-    $scope.authbasetx = '';
+    $scope.authhead = '';
     $scope.authheadAddress = '';
+    $scope.authheadchain = [];
 
     $scope.fromAddresses = [];
     $rootScope.toAddresses = {};
@@ -49,8 +50,9 @@ angular.module('playApp.bitauth', ['ngRoute'])
   reset();
 
   $scope.privateKey = '';
-  $scope.authbasetx = '';
+  $scope.authhead = '';
   $scope.authheadAddress = '';
+  $scope.authheadchain = [];
 
   $scope.fromAddresses = [];
   $rootScope.toAddresses = {};
@@ -115,11 +117,11 @@ angular.module('playApp.bitauth', ['ngRoute'])
         //if (!bitcore.Address.isValid(address)) return; // mark as invalid
 
         $scope.loading2 = true;
-        client.getTransaction(authbase, onUTXOs);
+        $scope.authheadchain.push(authbase);
 
-        //$scope.fromAddresses.push(address);
+        client.getTransaction(authbase, onTx);
 
-        function onUTXOs(err, tx) {
+        function onTx(err, tx) {
             $scope.loading2 = false;
             if (err) throw err;
             var spentTxId = tx.vout[0].spentTxId;
@@ -127,42 +129,15 @@ angular.module('playApp.bitauth', ['ngRoute'])
             if (spentTxId !== null) {
                 $scope.resolveAuthhead(spentTxId);
             } else {
+                $scope.authhead = authbase;
+                console.log('your authbase is: ' + $scope.authbase);
+                console.log('your current authhead is: ' + $scope.authhead);
+                $scope.authheadtext = 'your current authhead is: ' + $scope.authhead;
                 $scope.$apply();
                 return;
             }
         }
     };
-  /*
-    $scope.resolveAuthhead = function(authbase) {
-        var client;
-        if (bitcore.Networks.defaultNetwork.name === 'testnet') {
-            client = new explorers.Insight('https://dev-test.dash.org:3001', bitcore.Networks.defaultNetwork.name);
-        } else {
-            client = new explorers.Insight('https://insight.dash.org:3001', bitcore.Networks.defaultNetwork.name);
-        }
-        //if (!bitcore.Transaction.isValid(authbase)) return; // mark as invalid
-
-        $scope.loading2 = true;
-        console.log('requesting api...');
-        client.getTransaction(authbase, function callback(err, tx) {
-            $scope.loading2 = false;
-            if (err) throw err;
-
-            if (!tx.length) {
-                $scope.authbasetx = '';
-                return;
-            }
-
-            $scope.authbasetx = tx;
-            var idoutput = tx.outputs[0];
-            $scope.$apply();
-            console.log(tx);
-            console.log(idoutput);
-        });
-
-
-    };
-*/
 
   $scope.signWith = function(privKey) {
     try {
